@@ -18,6 +18,6 @@ What you can do is:
 ## TODO
 
 - [ ] Translate to english.
-- [ ] Make it delete for real.
+- [ ] Make it delete for real just for the lulz.
 - [ ] Fix some bugs. (?)
 - [x] ¯\\_(ツ)_/¯

@@ -17,6 +17,6 @@ What you can do is:
 
 ## TODO
 
-- [ ] Translate to english.
+- [x] Translate to english.
 - [ ] Fix some bugs. (?)
 - [x] ¯\\_(ツ)_/¯

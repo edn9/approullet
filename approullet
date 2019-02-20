@@ -30,7 +30,6 @@ case $input in
 				if [ "$a" != "$b" ]; then
 					echo -e "Não tem o arquivo de dados! Criando..."
 					touch dados
-					$a
 				else 
 					echo "Tem o arquivo dados, continuando."
 				fi	

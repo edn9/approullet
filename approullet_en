@@ -1,0 +1,143 @@
+#!/usr/bin/env bash
+#by necro - approullet v0.0.5, an simple shell that make you delete an app! (if you want tho)
+#the idea for this script was just to do an exercise/study of shellscript (to kill procrastination)
+#simple insert the social networks you usually go, then the program will choice one and then delete 
+#you will need to delete it, if you finish an task/job/etc, you can acess the site back.
+#What this can do?
+#1. Can create variables without limit
+#2. Can be saved (file called "dados") to load it again
+#3. Can random choice one of the variables and then mark it as [deleted]
+#4. Can delete all the varibles or just one of you choices
+clear
+echo "AppRoullet."
+read -r -p "Do you want to create variables? [y/n]" input;
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+		read -p "How many? " var;
+		for (( i=1; i<=$var; ++i )); do
+			read -p "$i. Name: " n;
+			test[$i]=$n
+			s+=$n
+		done
+		clear
+		for (( i=1; i<=$var; ++i )); do echo "$i. ${test[$i]}"; done
+		a=$(ls | grep dados)
+		b="dados"
+		read -p "Do you want to save it? [y/n] " y
+		case $y in
+			[yY][eE][sS]|[yY])
+				echo "Yes"
+				sleep 0.5
+				clear
+				if [ "$a" != "$b" ]; then
+					echo -e "Theres no file named dados! Creating..."
+					touch dados
+				else
+					echo "The file named dados exist. Continue."
+				fi	
+				j=$(cat dados | tail -1 | cut -d '.' -f 1)
+				if [ -n "$j" ]; then
+					for ((i=1; i<=$var; ++i)); do
+						: $((j++))
+						echo "$j. ${test[$i]}" >> dados;
+					done
+				else
+					echo "File dados without info, adding."
+					for (( i=1; i<=$var; ++i )); do 
+						echo "$i. ${test[$i]}" >> dados; 
+					done
+				fi
+				echo -e "\nHere is your dados:" 
+				cat dados
+				echo "--------------------"
+				;;
+			[nN][oO]|[nN])
+				echo "Nope"
+				;;
+			*)
+				echo "Invalid input..."
+				exit 1
+				;;
+		esac
+		;;
+	[nN][oO]|[nN])
+		echo "Nope..."
+		imprimir=0
+		;;
+	*)
+		echo "Invalid input..."
+		exit 1
+		;;
+esac
+if [ "$imprimir" == 0 ];then
+	read -r -p "Print vars? [Y/n] " input
+	case $input in
+		[yY][eE][sS]|[yY])
+			echo "Yes"
+			echo -e "\nHere your dados:" 
+			cat dados
+			echo "--------------------"
+			;;
+		[nN][oO]|[nN])
+			echo "Nope."
+			;;
+		*)
+			echo "Invalid input..."
+			exit 1
+			;;
+	esac
+fi
+read -r -p "Print random vars? [Y/n] " input
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+		echo -e "\nHere your dados:" 
+		cat dados
+		echo "--------------------"
+		echo -e "\nYour random var is... "
+		ale=$(sort -R dados)
+		al=$(echo $ale | cut -d ' ' -f 1,2)
+		echo $al
+		echo -e "\nAny luck?"
+		read
+		el=$(echo $al | cut -d '.' -f 1)
+		sed -i $el's/$/ [deleted]/' dados
+		;;
+	[nN][oO]|[nN])
+		echo "Nope."
+		;;
+	*)
+		echo "Invalid input..."
+		exit 1
+		;;
+esac
+read -r -p "Delete var? [Y/n] " input
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+		read -p "Write [1] to delete everything and [2] to choice what to delete: " escolha;
+		if [ "$escolha" == 1 ]; then
+			rm dados
+		else
+			if [ "$escolha" == 2 ]; then
+				cat dados
+				read -p "Which one? " ap;
+				ap=$ap"d"
+				sed -i $ap dados
+				cat dados
+			else
+				echo "Invalid input."
+			fi
+		fi
+		;;
+	[nN][oO]|[nN])
+		echo "Nope"
+		;;
+	*)
+		echo "Invalid input..."
+		exit 1
+		;;
+esac
+echo -e "\nBye!"
+exit

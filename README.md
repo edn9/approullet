@@ -18,5 +18,6 @@ What you can do is:
 ## TODO
 
 - [ ] Translate to english.
+- [ ] Make it delete for real.
 - [ ] Fix some bugs. (?)
 - [x] ¯\\_(ツ)_/¯

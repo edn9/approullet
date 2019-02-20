@@ -2,8 +2,8 @@
 A basic shellscript that make you delete apps! (*If you want tho*)
 
 ## Dependencies
-- `bash 5.0.2`
-- `sed 4.7`
+- `bash (used 5.0.2)`
+- `sed (used 4.7)`
 
 ## What this can do?
 Just run the script with bash in a terminal: `bash approullet`

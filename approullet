@@ -1,0 +1,151 @@
+#!/usr/bin/env bash
+#by necro - app roullet (pode criar novas vars, salvar em arquivo chamado "dados", escolher algum aleatorio e apagar o que voce escolher ou tudo
+
+clear
+echo "Programa de criar variaveis!"
+read -r -p "Quer criar vars? [y/n]" input;
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+
+		read -p "Quantas? " var;
+
+		for (( i=1; i<=$var; ++i )); do
+			read -p "$i. Nome: " n;
+			test[$i]=$n
+			s+=$n
+		done
+
+		clear
+		for (( i=1; i<=$var; ++i )); do echo "$i. ${test[$i]}"; done
+
+		a=$(ls | grep dados)
+		b="dados"
+		read -p "Deseja salvar suas variaveis? [y/n] " y
+		case $y in
+			[yY][eE][sS]|[yY])
+				echo "Yes"
+				sleep 0.5
+				clear
+				if [ "$a" != "$b" ]; then
+					echo -e "Não tem o arquivo de dados! Criando..."
+					touch dados
+					$a
+				else 
+					echo "Tem o arquivo dados, continuando."
+				fi	
+
+				j=$(cat dados | tail -1 | cut -d '.' -f 1)
+				if [ -n "$j" ]; then
+					for ((i=1; i<=$var; ++i)); do
+						: $((j++))
+						echo "$j. ${test[$i]}" >> dados;
+					done
+				else
+					echo "Arquivo dados sem informação, adicionando."
+					for (( i=1; i<=$var; ++i )); do 
+
+						echo "$i. ${test[$i]}" >> dados; 
+					done
+				fi
+				echo -e "\nEsses são os dados:" 
+				cat dados
+				echo "--------------------"
+				;;
+			[nN][oO]|[nN])
+				echo "Nope"
+				;;
+			*)
+				echo "Comando invalido..."
+				exit 1
+				;;
+		esac
+		;;
+	[nN][oO]|[nN])
+		echo "Nope..."
+		imprimir=0
+		;;
+	*)
+		echo "Comando invalido..."
+		exit 1
+		;;
+esac
+
+if [ "$imprimir" == 0 ];then
+	read -r -p "Imprimir variaveis? [Y/n] " input
+
+	case $input in
+		[yY][eE][sS]|[yY])
+			echo "Yes"
+			echo -e "\nEsses são os dados:" 
+			cat dados
+			echo "--------------------"
+			;;
+		[nN][oO]|[nN])
+			echo "Nope."
+			;;
+		*)
+			echo "Invalid input..."
+			exit 1
+			;;
+	esac
+fi
+
+read -r -p "Imprimir variavel aleatoria? [Y/n] " input
+
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+		echo -e "\nEsses são os dados:" 
+		cat dados
+		echo "--------------------"
+		echo -e "\nSua variavel aleatoria é... "
+		ale=$(sort -R dados)
+		al=$(echo $ale | cut -d ' ' -f 1,2)
+		echo $al
+		echo -e "\nDeu sorte?"
+		read
+		el=$(echo $al | cut -d '.' -f 1)
+		sed -i $el's/$/ [apagado]/' dados
+		;;
+	[nN][oO]|[nN])
+		echo "Nope."
+		;;
+	*)
+		echo "Invalid input..."
+		exit 1
+		;;
+esac
+
+read -r -p "Deletar variavel? [Y/n] " input
+
+case $input in
+	[yY][eE][sS]|[yY])
+		echo "Yes"
+		read -p "Digite [1] para tudo ou [2]escolher: " escolha;
+
+		if [ "$escolha" == 1 ]; then
+			rm dados
+		else
+			if [ "$escolha" == 2 ]; then
+				cat dados
+				read -p "Qual apagar? " ap;
+				ap=$ap"d"
+				sed -i $ap dados
+				cat dados
+			else
+				echo "Comando invalido."
+			fi
+		fi
+		;;
+	[nN][oO]|[nN])
+		echo "Nope"
+		;;
+	*)
+		echo "Comando invalido..."
+		exit 1
+		;;
+esac
+
+echo -e "\nFalou!"
+exit
